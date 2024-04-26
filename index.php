@@ -20,4 +20,4 @@ if (isset($_GET['page'])) {
 }
 
 
-require_once './views/includes/footer.php';
+// require_once './views/includes/footer.php';
