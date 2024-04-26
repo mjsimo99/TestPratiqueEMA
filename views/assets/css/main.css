@@ -1,0 +1,257 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #F8F8F8	;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    color: #fff;
+  }
+  
+  .logo-section {
+    background-color: orangered;
+    padding: 5px;
+    width: 128px;
+    text-align: center;
+    
+  }
+  
+  .nav-section ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    margin-left: 20px;
+    padding: 5px;
+  
+  }
+  
+  .down-arrow {
+      display: flex;
+      align-items: center;
+  }
+  
+  .nav-section a {
+    color: black;
+    text-decoration: none;
+    padding: 5px;
+    font-family: sans-serif;
+    font-size: small;
+  }
+  
+  .nav-section a:hover {
+    background-color: #555;
+  }
+  .navigations{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin-right: 20px;
+  }
+  .search-label{
+      color: grey;
+      font-family: sans-serif;
+      font-size: small;
+  }
+  .search-input{
+      border: none;
+      width: 100px;
+  }
+  .search-section{
+      display: flex;
+      align-items: center;
+  }
+  .search-folder, .cart {
+      margin-right: 20px;
+  }
+  .nav-section-search{
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+  }
+
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .vertical-nav {
+    padding: 15px;
+    box-sizing: border-box;
+  }
+  
+  .vertical-nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 20px;
+  }
+  
+
+  .vertical-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 8px 8px;
+    font-family: sans-serif;
+    font-size: 13px;
+
+  }
+  
+  .vertical-nav li a:hover {
+    background-color: #ddd;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  h3{
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 200;
+  }
+  .left-navigations{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 150px;
+  }
+  .left-navigations-b{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+
+.home-navigations{
+    padding: 5px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+
+  }
+  h4{
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    color: #555;
+  }
+
+
+
+  .container-b {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .recherche-rapide,
+  .recherche-avancee {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+  }
+
+  .recherche-avancee {
+    max-width: 450px;
+  }
+  h2 {
+    margin:0;
+  }
+
+  
+  input[type="text"],
+  input[type="tel"] {
+    flex: 1;
+    padding: 5px;
+    margin-right: 5px;
+    width: 200px;
+  }
+  
+  .ou {
+    margin: 7px 5px;
+  }
+  
+  .btn-recherche {
+    background-color: #ff6600;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  input {
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+  }
+  
+  
+  .map-container {
+    width: 45%;
+  }
+  
+  .map-container img {
+    max-width: 100%;
+    height: auto;
+  }
+  .line {
+    height: 2px;
+    width: 60px;
+    background-color: red;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    border-radius: 100%;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between; 
+    margin-bottom: 10px;
+
+  }
+  
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+  }
+  
+  .search-labels {
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  
+  .input-group-b {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+
+
+    
+  }
+
+  #map {
+    height: 340px;
+    width: 600px;
+    border-radius: 10px;
+}
+.section-b{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
