@@ -1,4 +1,4 @@
-	<!--feature end -->
+	feature end
         <!--footer start-->
 		<footer id="footer"  class="footer">
 			<div class="container">
