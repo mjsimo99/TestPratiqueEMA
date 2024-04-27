@@ -1,4 +1,7 @@
-<?php require './views/includes/header.php'; ?>
+<?php require './views/includes/header.php'; 
+
+
+?>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -27,44 +30,43 @@
 
 
 
-  <!-- 
-	<div class="form-searchbynumber">
-		<form action="" method="POST">
-			<div class="form-group">
-				<label for="numero">Numéro de commande</label>
-				<input type="text" class="form-control" id="numero" name="numero" placeholder="Entrez le numéro de commande" required>
-			</div>
-			<button type="submit" name="submit" class="btn btn-primary">Rechercher</button>
-		</form>
-	</div> -->
+
 
 
   <div class="container-b">
     <div class="recherche-rapide">
       <h2>Recherche rapide</h2>
       <div class="line"></div>
-      <div class="input-group">
-        <div class="input-container">
-          <label class="search-labels">VOTRE ADRESSE POSTALE</label>
-          <input type="text" placeholder="Ex: 60 Avenue de la Montaigne, Paris, France" disabled>
+      <form method="POST" action="ndiResult">
+        <div class="input-group">
+
+          <div class="input-container">
+            <label class="search-labels">VOTRE ADRESSE POSTALE</label>
+            <input type="text" placeholder="Ex: 60 Avenue de la Montaigne, Paris, France" disabled>
+          </div>
+          <div class="input-container">
+            <span class="ou">Ou</span>
+          </div>
+          <div class="input-container">
+            <label class="search-labels">VOTRE NUMÉRO DE TÉLÉPHONE</label>
+            <input type="tel" id="phone-number-input" name="phone_number" required>
+          </div>
+          <div class="input-container">
+            <span class="ou">Ou</span>
+          </div>
+          <div class="input-container">
+            <label class="search-labels">VOTRE CODE IMMOBILE</label>
+            <input type="text" disabled>
+          </div>
+          <button type="submit" name="submit"  class="btn-recherche" id="search-button">Lancer la recherche</button>
         </div>
-        <div class="input-container">
-          <span class="ou">Ou</span>
-        </div>
-        <div class="input-container">
-          <label class="search-labels">VOTRE NUMÉRO DE TÉLÉPHONE</label>
-          <input type="tel">
-        </div>
-        <div class="input-container">
-          <span class="ou">Ou</span>
-        </div>
-        <div class="input-container">
-          <label class="search-labels">VOTRE CODE IMMOBILE</label>
-          <input type="text" disabled>
-        </div>
-        <button class="btn-recherche">Lancer la recherche</button>
-      </div>
+        </form>
     </div>
+
+
+
+    
+
     
     <div class="section-b">
     <div class="recherche-avancee">
@@ -95,19 +97,20 @@
           Ou
         </span>
       </div>
+      <form action="ndiByAddressResult" method="POST">
       <div class="input-group-b">
         <div class="input-container">
           <label class="search-labels">Latitude</label>
-          <input type="text" placeholder="Ex: 47.197255" id="latitude-input">
+          <input type="text" placeholder="Ex: 47.197255" id="latitude-input" name="latitude">
         </div>
         <div class="input-container">
           <label class="search-labels">Longitude</label>
-          <input type="text" placeholder="Ex: -1.504562" id="longitude-input">
+          <input type="text" placeholder="Ex: -1.504562" id="longitude-input" name="longitude">
         </div>
       </div>
-
       <button class="btn-recherche">Lancer la recherche</button>
     </div>
+    </form>
     <div class="map">
       <div id="map"></div>
     </div>
