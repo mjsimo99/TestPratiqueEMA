@@ -5,7 +5,7 @@ require_once './autoload.php';
 include('./views/includes/alerts.php');
 
 $home = new HomeController();
-$pages = ['index','country','search'];
+$pages = ['index','country','search','ndiResult','ndiByAddressResult'];
 
 
 if (isset($_GET['page'])) {
