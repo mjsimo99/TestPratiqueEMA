@@ -255,3 +255,9 @@ body {
     justify-content: space-between;
     margin-top: 20px;
 }
+.buttonNumberResult{
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
