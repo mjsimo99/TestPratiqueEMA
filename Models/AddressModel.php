@@ -19,7 +19,7 @@ class AddressModel
             return null;
         }
 
-        $url = "https://demo-xvno.ema.expert/ema/api/v1/endpoint/ndi_by_address/?latitude=$latitude&longitude=$longitude";
+        $url = ADDRESS_API_URL . '?latitude=' . urlencode($latitude) . '&longitude=' . urlencode($longitude);
         $username = API_USERNAME;
         $password = API_PASSWORD;
 
