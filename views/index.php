@@ -2,13 +2,7 @@
 
 
 ?>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-</style>
+
 <main class="content">
   <h4>Commandes
     <svg width="8px" height="8px" viewBox="-4 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FF5733" stroke="#FF5733">
@@ -123,28 +117,5 @@
 
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+<script src="../Satoru-MVC1/views/assets/js/main.js"></script>
 
-<script>
-  const latitudeInput = document.querySelector('#latitude-input');
-  const longitudeInput = document.querySelector('#longitude-input');
-
-  const map = L.map('map').setView([51.505, -0.09], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
-  let marker = null;
-
-  map.on('click', function(e) {
-    if (marker) {
-      map.removeLayer(marker);
-    }
-
-    marker = L.marker(e.latlng).addTo(map);
-    latitudeInput.value = e.latlng.lat.toFixed(6);
-    longitudeInput.value = e.latlng.lng.toFixed(6);
-
-    marker.bindPopup(`Latitude: ${e.latlng.lat.toFixed(6)}, Longitude: ${e.latlng.lng.toFixed(6)}`).openPopup();
-  });
-</script>
