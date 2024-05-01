@@ -13,4 +13,5 @@ class AddressController
     {
         return $this->addressModel->searchNdiByAddress($latitude, $longitude);
     }
+    
 }
