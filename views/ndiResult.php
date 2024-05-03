@@ -166,8 +166,10 @@ function fetchData() {
                                         echo "<td class='td'>" . $offer['engagement'] . "</td>";
                                         echo "<td class='td'>" . '€'  . "</td>";
                                         echo "<td class='td'>" . '€' . "</td>";
+                                        
 
                                         echo "</tbody>";
+
                                     }
                                 }
                             }
