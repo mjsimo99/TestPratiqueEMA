@@ -1,3 +1,4 @@
+<!-- ndiresult.php -->
 <?php
 
 require './views/includes/header.php';
@@ -16,7 +17,25 @@ if (isset($_POST['submit']) && isset($_POST['phone_number'])) {
 } else {
     $ndiList = [];
 }
+
+
+$eligibilityModel = new EligibilityModel();
+$eligibilityController = new EligibilityController($eligibilityModel);
+
+foreach ($ndiList as $ndiItem) {
+
+$ndi = $ndiData['data']['ndi'];
+$ndiStatus = $ndiData['data']['ndi_status'];
+$idtown = $ndiItem['idtown'];
+$street = $ndiItem['street'];
+$number = $ndiItem['street_number'];
+$latitude = $ndiItem['latitude'];
+$longitude = $ndiItem['longitude'];
+}
+
+$data = $eligibilityController->fetchData($ndi, $ndiStatus, $idtown, $street, $number, $latitude, $longitude);
 ?>
+
 <div class="ndi-dispo">
     <div class="title">
         <a href="index" class="retour">
@@ -108,88 +127,58 @@ if (isset($_POST['submit']) && isset($_POST['phone_number'])) {
                     <th class="th"></th>
                 </tr>
             </thead>
-            <?php
-
-function fetchData() {
-    $ndi = "0158460512 ";
-    $ndi_status = "inactive";
-    $idtown = 94043;
-    $street = " AVENUE DE FONTAINEBLEAU"; 
-    $number = "0"; 
-    $latitude = 48.814606;
-    $longitude = 2.361051;
-
-    $apiUrl = "https://demo-xvno.ema.expert/ema/api/v1/retailer_eligibility/?ndi=" . urlencode($ndi) . "&ndi_status=" . urlencode($ndi_status) . "&idtown=" . urlencode($idtown) . "&street=" . urlencode($street) . "&number=" . urlencode($number) . "&latitude=" . urlencode($latitude) . "&longitude=" . urlencode($longitude);
-
-    $username = "14484";
-    $password = "3fca31f5bee9e79e6951a1192c991e1fb05fdf9ebe912e4fbdfb6d5feb79663e525e7d36bd10ae271425f232b55b15e8e166bcc65f5d350509d9f5c4e5f8cad5";
-    $auth = base64_encode($username . ":" . $password);
-
-    $curl = curl_init($apiUrl);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-        'Authorization: Basic ' . $auth
-    ));
-
-    $response = curl_exec($curl);
-    $error = curl_error($curl);
-
-    curl_close($curl);
-
-    if ($error) {
-        return json_encode(array("error" => "Error fetching data: $error"));
-    } else {
-        $data = json_decode($response, true);
+            <tbody>
+        <?php
         $offerCount = 0;
-        $tableBody = ''; 
-        if ($data && isset($data['data'])) {
-            foreach ($data['data'] as $section) {
-                if (isset($section['list'])) {
-                    foreach ($section['list'] as $mainList) {
-                        if (isset($mainList['list'])) {
-                            foreach ($mainList['list'] as $offerList) {
-                                if (isset($offerList['list'])) {
-                                    $offerCount += count($offerList['list']);
+        foreach ($data as $section) {
+            if (isset($section['list'])) {
+                foreach ($section['list'] as $mainList) {
+                    if (isset($mainList['list'])) {
+                        foreach ($mainList['list'] as $offerList) {
+                            if (isset($offerList['list'])) {
+                                $offerCount += count($offerList['list']);
 
-                                    foreach ($offerList['list'] as $offer) {
-                                        echo "<tbody>";
+                                foreach ($offerList['list'] as $offer) {
+                                    echo "<tr>";
+                                    echo "<td class='td'>" . $offer['provider'] . "</td>";
+                                    echo "<td class='td'>" . $offer['offer'] . "</td>";
+                                    echo "<td class='td'>"
+                                        . "<div class='td-range'>"
+                                        . "<span>10 Mb/s</span>"
+                                        . "<input type='range' id='speed-range' min='10' max='10000' value='100' step='1'> "
+                                        . "<span id='speed-value'>" . $offer['debit'] ."</span>"
+                                        . "</div>"
+                                        . "</td>";
+                                    echo "<td class='td'>";
 
-                                        echo "<td class='td'>" . $offer['provider'] . "</td>";
-                                        echo "<td class='td'>" . $offer['offer'] . "</td>";
-                                        echo "<td class='td'>"
-                                            . "<div class='td-range'>"
-                                            . "<span>10 Mb/s</span>"
-                                            . "<input type='range' id='speed-range' min='10' max='10000' value='100' step='1'> "
-                                            . "<span id='speed-value'>1 Gb/s</span>"
-                                            . "</div>" 
-                                            . "</td>";
-                                        echo "<td class='td'>" . $offer['engagement'] . "</td>";
-                                        echo "<td class='td'>" . '€'  . "</td>";
-                                        echo "<td class='td'>" . '€' . "</td>";
+                                        $engagementOptions = explode(' ', $offer['engagement']);
+                                        $engagementValue = (int) $engagementOptions[0];
+                                        $engagementUnit = isset($engagementOptions[1]) ? $engagementOptions[1] : '';
                                         
-
-                                        echo "</tbody>";
-
-                                    }
+                                        if ($offer['engagement'] === "Sans engagement") {
+                                            echo $offer['engagement'];
+                                        } else {
+                                        
+                                            for ($i = 1; $i <= $engagementValue; $i++) {
+                                                echo "<label><input type='radio' name='engagement-option' value='$i $engagementUnit'> $i $engagementUnit</label><br>";
+                                            }
+                                        }
+                                        
+                                    echo "</td>";
+                                    echo "</td>";
+                                    echo "<td class='td'>" . $offer['amt_recur'] . "€/Mois</td>";
+                                    echo "<td class='td'>" . 'sur devis' . "</td>";
+                                    echo "</tr>";
                                 }
                             }
                         }
                     }
                 }
-                echo "total offers: " . $offerCount;
-
             }
-        } else {
-            return json_encode(array("error" => "No data found."));
         }
-    }
-}
-
-echo fetchData();
-
-?>
-
-            </tbody>
+        echo "<tr><td colspan='7'>Total offers: " . $offerCount . "</td></tr>";
+        ?>
+    </tbody>
             </table>
 </div>
 
