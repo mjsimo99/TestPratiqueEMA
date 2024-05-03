@@ -12,3 +12,12 @@ $(document).ready(function() {
     updateSpeedValue();
   });
 
+
+
+
+    $(document).ready(function() {
+        $('input[type="radio"]').change(function() {
+            var selectedOption = $(this).val();
+            $(this).closest('td').text(selectedOption);
+        });
+    });
