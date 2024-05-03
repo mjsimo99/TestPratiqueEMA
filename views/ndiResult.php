@@ -108,31 +108,16 @@ if (isset($_POST['submit']) && isset($_POST['phone_number'])) {
                     <th class="th"></th>
                 </tr>
             </thead>
-            <tbody id="table-body">
-                <!-- Table body will be populated dynamically -->
-            </tbody>
-            </table>
-</div>
-
-<script>
-    const ndiList = <?php echo json_encode($ndiList); ?>;
-</script>
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
-<script src="views/assets/js/map.js"></script>
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<?php
+            <?php
 
 function fetchData() {
-    $ndi = "0466281850";
+    $ndi = "0158460512 ";
     $ndi_status = "inactive";
-    $idtown = 30189;
-    $street = ""; 
-    $number = "3"; 
-    $latitude = 43.832103;
-    $longitude = 4.351141;
+    $idtown = 94043;
+    $street = " AVENUE DE FONTAINEBLEAU"; 
+    $number = "0"; 
+    $latitude = 48.814606;
+    $longitude = 2.361051;
 
     $apiUrl = "https://demo-xvno.ema.expert/ema/api/v1/retailer_eligibility/?ndi=" . urlencode($ndi) . "&ndi_status=" . urlencode($ndi_status) . "&idtown=" . urlencode($idtown) . "&street=" . urlencode($street) . "&number=" . urlencode($number) . "&latitude=" . urlencode($latitude) . "&longitude=" . urlencode($longitude);
 
@@ -155,14 +140,43 @@ function fetchData() {
         return json_encode(array("error" => "Error fetching data: $error"));
     } else {
         $data = json_decode($response, true);
+        $offerCount = 0;
+        $tableBody = ''; 
         if ($data && isset($data['data'])) {
-            // $result = '';
-            // foreach ($data['data'] as $ndiItem) {
-            //     $result .= '<div>Opérateur: ' . $ndiItem['name'] . ', Offre: ' . $ndiItem['list']['offer'] . ', Débit: ' . $ndiItem['list']['debit'] . '</div>';
-            // }
-            // return $result;
-            return json_encode($data['data']);
+            foreach ($data['data'] as $section) {
+                if (isset($section['list'])) {
+                    foreach ($section['list'] as $mainList) {
+                        if (isset($mainList['list'])) {
+                            foreach ($mainList['list'] as $offerList) {
+                                if (isset($offerList['list'])) {
+                                    $offerCount += count($offerList['list']);
 
+                                    foreach ($offerList['list'] as $offer) {
+                                        echo "<tbody>";
+
+                                        echo "<td class='td'>" . $offer['provider'] . "</td>";
+                                        echo "<td class='td'>" . $offer['offer'] . "</td>";
+                                        echo "<td class='td'>"
+                                            . "<div class='td-range'>"
+                                            . "<span>10 Mb/s</span>"
+                                            . "<input type='range' id='speed-range' min='10' max='10000' value='100' step='1'> "
+                                            . "<span id='speed-value'>1 Gb/s</span>"
+                                            . "</div>" 
+                                            . "</td>";
+                                        echo "<td class='td'>" . $offer['engagement'] . "</td>";
+                                        echo "<td class='td'>" . '€'  . "</td>";
+                                        echo "<td class='td'>" . '€' . "</td>";
+
+                                        echo "</tbody>";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                echo "total offers: " . $offerCount;
+
+            }
         } else {
             return json_encode(array("error" => "No data found."));
         }
@@ -172,3 +186,17 @@ function fetchData() {
 echo fetchData();
 
 ?>
+
+            </tbody>
+            </table>
+</div>
+
+<script>
+    const ndiList = <?php echo json_encode($ndiList); ?>;
+</script>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+<script src="views/assets/js/map.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
