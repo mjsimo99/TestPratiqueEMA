@@ -14,6 +14,8 @@ if (isset($_POST['latitude']) && isset($_POST['longitude'])) {
 } else {
     $ndiList = [];
 }
+
+
 ?>
 
 <div class="ndi-dispo">
