@@ -1,7 +1,62 @@
-<?php require './views/includes/header.php'; 
+<?php
+require_once 'app/Classes/config/config.php';
 
+$username = API_USERNAME;
+$password = API_PASSWORD;
 
+function setupCurl($url, $username, $password) {
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+    return $curl;
+}
+
+function fetchData($url, $username, $password) {
+    $curl = setupCurl($url, $username, $password);
+    $response = curl_exec($curl);
+    $error = curl_error($curl);
+    curl_close($curl);
+
+    if ($error) {
+        throw new RuntimeException("Curl error: $error");
+    }
+
+    return $response;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+    $action = $_POST['action'];
+
+    switch ($action) {
+        case 'fetchTowns':
+            $postalCode = $_POST['postalCode'];
+            $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/town/?iso_alpha2=fr&zip=' . $postalCode;
+            echo fetchData($url, $username, $password);
+            break;
+        case 'fetchStreets':
+            $idtown = $_POST['idtown'];
+            $streetName = $_POST['streetName'];
+            $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/street/?idtown=' . $idtown . '&street=' . urlencode($streetName);
+            echo fetchData($url, $username, $password);
+            break;
+        case 'fetchHouseNumbers':
+            $idtown = $_POST['idtown'];
+            $idstreet = $_POST['idstreet'];
+            $number = $_POST['number']; 
+            $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/housenumber/?iso_alpha2=fr&idtown=' . $idtown . '&idstreet=' . $idstreet . '&number=' . $number; // Update the URL
+            echo fetchData($url, $username, $password);
+            break;
+
+    }
+    exit;
+} else {
+    require './views/includes/header.php';
+}
 ?>
+
+
 
 <main class="content">
   <h4>Commandes
@@ -63,52 +118,64 @@
 
     
     <div class="section-b">
-    <div class="recherche-avancee">
-      <h2>Recherche avancée</h2>
-      <div class="line"></div>
-      <div class="input-group-b">
-        <div class="input-container">
-          <label class="search-labels">Code postal</label>
-          <input type="text" placeholder="Ex: 75014">
+      <div class="recherche-avancee">
+        <h2>Recherche avancée</h2>
+        <div class="line"></div>
+        <form action="ndiByAddress" method="POST">
+          <div class="input-group-b">
+            <div class="input-container">
+              <label class="search-labels">Code postal</label>
+              <input type="text" placeholder="Ex: 75014" id="postal-code-input" name="postalCode">
+            </div>
+            <div class="input-container">
+              <label class="search-labels">Ville</label>
+              <select id="city-select" name="city-select"></select>
+            </div>
+          </div>
+          <div class="input-group-b">
+              <div class="input-container">
+                <label class="search-labels">Nom de la voie</label>
+                <input type="text" id="street-input" placeholder="Ex: Gambetta" name="street-input">
+              </div>
+              <div class="input-container">
+                  <label class="search-labels">N voie(facultatif)</label>
+                  <select id="house-number-select" name="house-number-select">
+                      <option value="">Select House Number</option>
+                      <?php
+                          for ($i = 0; $i <= 80; $i++) {
+                              echo "<option value=\"$i\">$i</option>";
+                          }
+                      ?>
+                  </select>            
+              </div>
+              <button class="search_by_idtown_idway" type="submit" name="submit">
+              FetchResult</button>
+          </div>
+        </form>
+
+        <div class="input-group-b">
+          <span class="ou">
+            Ou
+          </span>
         </div>
-        <div class="input-container">
-          <label class="search-labels">Ville</label>
-          <input type="text" placeholder="Pays">
-        </div>
+        <form action="ndiByAddressResult" method="POST">
+          <div class="input-group-b">
+            <div class="input-container">
+              <label class="search-labels">Latitude</label>
+              <input type="text" placeholder="Ex: 47.197255" id="latitude-input" name="latitude">
+            </div>
+            <div class="input-container">
+              <label class="search-labels">Longitude</label>
+              <input type="text" placeholder="Ex: -1.504562" id="longitude-input" name="longitude">
+            </div>
+          </div>
+          <button class="btn-recherche">Lancer la recherche</button>
+        </form>
       </div>
-      <div class="input-group-b">
-        <div class="input-container">
-          <label class="search-labels">Nom de la voie</label>
-          <input type="text" placeholder="Ex: Rue du centre">
-        </div>
-        <div class="input-container">
-          <label class="search-labels">Nde rue</label>
-          <input type="tel" placeholder="Ex: 1">
-        </div>
+      <div class="map">
+        <div id="map"></div>
       </div>
-      <div class="input-group-b">
-        <span class="ou">
-          Ou
-        </span>
-      </div>
-      <form action="ndiByAddressResult" method="POST">
-      <div class="input-group-b">
-        <div class="input-container">
-          <label class="search-labels">Latitude</label>
-          <input type="text" placeholder="Ex: 47.197255" id="latitude-input" name="latitude">
-        </div>
-        <div class="input-container">
-          <label class="search-labels">Longitude</label>
-          <input type="text" placeholder="Ex: -1.504562" id="longitude-input" name="longitude">
-        </div>
-      </div>
-      <button class="btn-recherche">Lancer la recherche</button>
     </div>
-    </form>
-    <div class="map">
-      <div id="map"></div>
-    </div>
-  </div>
 
   </div>
 
@@ -119,3 +186,130 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
 <script src="../Satoru-MVC1/views/assets/js/main.js"></script>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#postal-code-input').on('input', function() {
+        const postalCode = $(this).val();
+
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+            data: {
+                action: 'fetchTowns',
+                postalCode: postalCode
+            },
+            success: function(response) {
+                const citySelect = $('#city-select');
+                citySelect.empty();
+
+                const towns = JSON.parse(response);
+                towns.forEach(function(town) {
+                    citySelect.append($('<option>', {
+                        value: town.idtown,
+                        text: town.town
+                    }));
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+
+    $('#city-select').on('change', function() {
+        const idtown = $(this).val();
+        const streetInput = $('#street-input');
+        const streetName = streetInput.val();
+
+        if (idtown && streetName) {
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+                data: {
+                    action: 'fetchStreets',
+                    idtown: idtown,
+                    streetName: streetName
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    });
+    $('#house-number-select').on('change', function() {
+    const idtown = $('#city-select').val();
+    const streetName = $('#street-input').val(); 
+    const number = $(this).val(); 
+
+    if (idtown && streetName && number !== '') { 
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+            data: {
+                action: 'fetchStreets',
+                idtown: idtown,
+                streetName: streetName
+            },
+            success: function(response) {
+                const streetResponse = JSON.parse(response);
+                const idstreet = streetResponse[0].idstreet; 
+                fetchHouseNumbers(idtown, idstreet, number);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+});
+
+function fetchHouseNumbers(idtown, idstreet, number) {
+    if (idtown && idstreet && number !== '') {
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+            data: {
+                action: 'fetchHouseNumbers',
+                idtown: idtown,
+                idstreet: idstreet,
+                number: number 
+            },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+}
+
+
+    $('#street-input').on('input', function() {
+        const idtown = $('#city-select').val();
+        const streetName = $(this).val();
+
+        if (idtown && streetName) {
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+                data: {
+                    action: 'fetchStreets',
+                    idtown: idtown,
+                    streetName: streetName
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    });
+});
+</script>
