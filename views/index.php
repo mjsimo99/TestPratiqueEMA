@@ -128,9 +128,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
             </div>
           </div>
           <div class="input-group-b">
-              <div class="input-container">
+              <!-- <div class="input-container">
                 <label class="search-labels">Nom de la voie</label>
                 <input type="text" id="street-input" placeholder="Ex: Gambetta" name="street-input">
+              </div> -->
+              <div class="input-container">
+                  <label class="search-labels">Nom de la voie</label>
+                  <input type="text" id="street-input" placeholder="Ex: Gambetta" name="street-input" list="street-suggestions">
+                  <datalist id="street-suggestions"></datalist>
               </div>
               <div class="input-container">
                   <label class="search-labels">N voie(facultatif)</label>
@@ -183,128 +188,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#postal-code-input').on('input', function() {
-        const postalCode = $(this).val();
+<script src="../Satoru-MVC1/views/assets/js/ajax.js"></script>
 
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
-            data: {
-                action: 'fetchTowns',
-                postalCode: postalCode
-            },
-            success: function(response) {
-                const citySelect = $('#city-select');
-                citySelect.empty();
-
-                const towns = JSON.parse(response);
-                towns.forEach(function(town) {
-                    citySelect.append($('<option>', {
-                        value: town.idtown,
-                        text: town.town
-                    }));
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    });
-
-    $('#city-select').on('change', function() {
-        const idtown = $(this).val();
-        const streetInput = $('#street-input');
-        const streetName = streetInput.val();
-
-        if (idtown && streetName) {
-            $.ajax({
-                type: 'POST',
-                url: '<?php echo $_SERVER['PHP_SELF']; ?>',
-                data: {
-                    action: 'fetchStreets',
-                    idtown: idtown,
-                    streetName: streetName
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }
-    });
-    $('#house-number-select').on('change', function() {
-    const idtown = $('#city-select').val();
-    const streetName = $('#street-input').val(); 
-    const number = $(this).val(); 
-
-    if (idtown && streetName && number !== '') { 
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
-            data: {
-                action: 'fetchStreets',
-                idtown: idtown,
-                streetName: streetName
-            },
-            success: function(response) {
-                const streetResponse = JSON.parse(response);
-                const idstreet = streetResponse[0].idstreet; 
-                fetchHouseNumbers(idtown, idstreet, number);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    }
-});
-
-function fetchHouseNumbers(idtown, idstreet, number) {
-    if (idtown && idstreet && number !== '') {
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
-            data: {
-                action: 'fetchHouseNumbers',
-                idtown: idtown,
-                idstreet: idstreet,
-                number: number 
-            },
-            success: function(response) {
-                console.log(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    }
-}
-
-
-    $('#street-input').on('input', function() {
-        const idtown = $('#city-select').val();
-        const streetName = $(this).val();
-
-        if (idtown && streetName) {
-            $.ajax({
-                type: 'POST',
-                url: '<?php echo $_SERVER['PHP_SELF']; ?>',
-                data: {
-                    action: 'fetchStreets',
-                    idtown: idtown,
-                    streetName: streetName
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }
-    });
-});
-</script>
