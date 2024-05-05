@@ -184,6 +184,7 @@ h2 {
 
 
 input[type="text"],
+select,
 input[type="tel"] {
   flex: 1;
   padding: 5px;
@@ -214,7 +215,7 @@ input[type="tel"] {
   color: #ff6600;
 }
 
-input {
+input , select {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
