@@ -76,12 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
     </svg>
     Eligibilité
   </h4>
-
-
-
-
-
-
+  
   <div class="container-b">
     <div class="recherche-rapide">
       <h2>Recherche rapide</h2>
@@ -148,15 +143,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
                       ?>
                   </select>            
               </div>
-              <button class="search_by_idtown_idway" type="submit" name="submit">
-              FetchResult</button>
           </div>
+          <button class="search_by_idtown_idway btn-recherche" type="submit" name="submit">
+              Lancer la recherche</button>
         </form>
 
         <div class="input-group-b">
-          <span class="ou">
+          <!-- <span class="ou">
             Ou
-          </span>
+          </span> -->
         </div>
         <form action="ndiByAddressResult" method="POST">
           <div class="input-group-b">
