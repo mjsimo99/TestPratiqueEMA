@@ -82,7 +82,7 @@ include '../Satoru-MVC1/views/data/apiClient.php';
               <div class="input-container">
                   <label class="search-labels">N voie(facultatif)</label>
                   <select id="house-number-select" name="house-number-select">
-                      <option value="">Select House Number</option>
+                      <option value=""> </option>
                       <?php
                           for ($i = 0; $i <= 80; $i++) {
                               echo "<option value=\"$i\">$i</option>";
