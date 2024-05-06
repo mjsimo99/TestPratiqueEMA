@@ -33,23 +33,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
     switch ($action) {
         case 'fetchTowns':
             $postalCode = $_POST['postalCode'];
-            $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/town/?iso_alpha2=fr&zip=' . $postalCode;
+            $url = TOWN_API_URL . '?iso_alpha2=fr&zip=' . $postalCode;
             echo fetchData($url, $username, $password);
             break;
         case 'fetchStreets':
             $idtown = $_POST['idtown'];
             $streetName = $_POST['streetName'];
-            $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/street/?idtown=' . $idtown . '&street=' . urlencode($streetName);
+            $url = STREET_API_URL . '?idtown=' . $idtown . '&street=' . urlencode($streetName);
             echo fetchData($url, $username, $password);
             break;
         case 'fetchHouseNumbers':
             $idtown = $_POST['idtown'];
             $idstreet = $_POST['idstreet'];
             $number = $_POST['number']; 
-            $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/housenumber/?iso_alpha2=fr&idtown=' . $idtown . '&idstreet=' . $idstreet . '&number=' . $number; // Update the URL
+            $url = HOUSE_NUMBER_API_URL . '?iso_alpha2=fr&idtown=' . $idtown . '&idstreet=' . $idstreet . '&number=' . $number; 
             echo fetchData($url, $username, $password);
             break;
-
     }
     exit;
 } else {
