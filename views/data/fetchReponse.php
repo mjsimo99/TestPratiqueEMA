@@ -30,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $idtown = $_POST['city-select'];
     $streetName = $_POST['street-input'];
 
-    $url = 'https://demo-xvno.ema.expert/ema/api/v1/endpoint/street/?idtown=' . $idtown . '&street=' . urlencode($streetName);
+    $url = STREET_API_URL . '?idtown=' . $idtown . '&street=' . urlencode($streetName);
     $streetResponse = json_decode(fetchData($url, $username, $password), true);
 
     if (is_array($streetResponse) && !empty($streetResponse)) {
         $idway = $streetResponse[0]['idway'];
 
-        $url = 'https://demo-xvno.ema.expert/ema/api/v1/address/ndi_by_address/?idtown=' . $idtown . '&idway=' . $idway;
+        $url = ADDRESS_API_URL . '?idtown=' . $idtown . '&idway=' . $idway;
         $ndiData = json_decode(fetchData($url, $username, $password), true);
 
         if (isset($ndiData['response']) && $ndiData['response'] === true) {
